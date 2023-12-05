@@ -52,5 +52,22 @@
                     // Use fetch or XMLHttpRequest here to send 'data' to your backend
                 }
             </script>
+
+            <button id="testConnection">Test Neo4j Connection</button>
+                <p id="result"></p>
+
+                <script>
+                    document.getElementById('testConnection').addEventListener('click', function() {
+                        fetch('/test-db-connection')
+                            .then(response => response.text())
+                            .then(data => {
+                                document.getElementById('result').textContent = data;
+                            })
+                            .catch(error => {
+                                document.getElementById('result').textContent = 'Error: ' + error;
+                            });
+                    });
+                </script>
+
         </body>
         </html>
