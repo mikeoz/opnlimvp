@@ -3,19 +3,18 @@ const path = require('path');
 const neo4j = require('neo4j-driver');
 
 const app = express();
-
-// Use the PORT from environment variables if available, otherwise default to 3000
 const port = process.env.PORT || 3000;
 
-// Hardcoded Neo4j database connection details
-const NEO4J_URI = 'neo4j+s://e9ccf68a.databases.neo4j.io';
+// Corrected Neo4j database connection details
+const NEO4J_URI = 'neo4j://e9ccf68a.databases.neo4j.io'; // Changed from neo4j+s to neo4j
 const NEO4J_USER = 'neo4j';
 const NEO4J_PASSWORD = 'Iw-YJYK1DLRlqvjd2BrpfKBTcSUqoPcNGo_mqNEWHQ';
 
 // Setup the Neo4j driver
 const driver = neo4j.driver(
     NEO4J_URI,
-    neo4j.auth.basic(NEO4J_USER, NEO4J_PASSWORD)
+    neo4j.auth.basic(NEO4J_USER, NEO4J_PASSWORD),
+    { maxTransactionRetryTime: 30000 }
 );
 
 // Middleware to parse URL-encoded bodies
@@ -29,9 +28,13 @@ app.get('/', (req, res) => {
 app.get('/test-db-connection', async (req, res) => {
     const session = driver.session();
     try {
-        // Perform a basic query to test the connection
-        await session.run('RETURN "Connection successful!" AS message');
-        res.send('Connection to Neo4j Aura successful!');
+        const writeTxResultPromise = session.writeTransaction(async txc => {
+            var result = await txc.run('RETURN "Connection successful!" AS message');
+            return result.records.map(record => record.get('message'));
+        });
+
+        const message = await writeTxResultPromise;
+        res.send('Connection to Neo4j Aura successful! Message: ' + message);
     } catch (error) {
         console.error('Database connection error:', error);
         res.status(500).send('Failed to connect to Neo4j Aura. Error: ' + error.message);
@@ -40,13 +43,11 @@ app.get('/test-db-connection', async (req, res) => {
     }
 });
 
-// Other routes remain unchanged...
-
 app.listen(port, () => {
     console.log("Server running on port", port);
 });
 
 // Close Neo4j driver on server close
-process.on('exit', () => {
-    driver.close();
+process.on('exit', async () => {
+    await driver.close();
 });
