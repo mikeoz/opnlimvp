@@ -5,8 +5,8 @@ const neo4j = require('neo4j-driver');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Corrected Neo4j database connection details
-const NEO4J_URI = 'neo4j://e9ccf68a.databases.neo4j.io'; // Changed from neo4j+s to neo4j
+// Neo4j database connection details
+const NEO4J_URI = 'neo4j://e9ccf68a.databases.neo4j.io';
 const NEO4J_USER = 'neo4j';
 const NEO4J_PASSWORD = 'Iw-YJYK1DLRlqvjd2BrpfKBTcSUqoPcNGo_mqNEWHQ';
 
@@ -34,7 +34,8 @@ app.get('/test-db-connection', async (req, res) => {
         });
 
         const message = await writeTxResultPromise;
-        res.send('Connection to Neo4j Aura successful! Message: ' + message);
+        const timestamp = new Date().toLocaleString();
+        res.send('Connection complete: ' + message + ' at ' + timestamp);
     } catch (error) {
         console.error('Database connection error:', error);
         res.status(500).send('Failed to connect to Neo4j Aura. Error: ' + error.message);
