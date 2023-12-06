@@ -6,9 +6,9 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Corrected Neo4j database connection details
-const NEO4J_URI = 'neo4j+s://e9ccf68a.databases.neo4j.io'; // Ensure the use of neo4j+s
+const NEO4J_URI = 'neo4j+s://2320fe1e.databases.neo4j.io'; // Ensure the use of neo4j+s
 const NEO4J_USER = 'neo4j';
-const NEO4J_PASSWORD = 'Iw-YJYK1DLRlqvjd2BrpfKBTcSUqoPcNGo_mqNEWHQ';
+const NEO4J_PASSWORD = 'tktfTZlXVF6lPMwPglT6vl3Hv5NNNcwqsQIq6LpLq-k';
 
 // Setup the Neo4j driver
 const driver = neo4j.driver(
