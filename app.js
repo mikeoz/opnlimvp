@@ -3,7 +3,9 @@ const path = require('path');
 const neo4j = require('neo4j-driver');
 
 const app = express();
-const port = 3000;
+
+// Use the PORT from environment variables if available, otherwise default to 3000
+const port = process.env.PORT || 3000;
 
 // Hardcoded Neo4j database connection details
 const NEO4J_URI = 'neo4j+s://e9ccf68a.databases.neo4j.io';
@@ -13,8 +15,7 @@ const NEO4J_PASSWORD = 'Iw-YJYK1DLRlqvjd2BrpfKBTcSUqoPcNGo_mqNEWHQ';
 // Setup the Neo4j driver
 const driver = neo4j.driver(
     NEO4J_URI,
-    neo4j.auth.basic(NEO4J_USER, NEO4J_PASSWORD),
-    { encrypted: 'ENCRYPTION_ON' }
+    neo4j.auth.basic(NEO4J_USER, NEO4J_PASSWORD)
 );
 
 // Middleware to parse URL-encoded bodies
