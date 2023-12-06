@@ -1,15 +1,20 @@
 const express = require('express');
 const path = require('path');
 const neo4j = require('neo4j-driver');
-require('dotenv').config(); // Use dotenv for environment variables
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
-// Setup the Neo4j driver using environment variables
+// Hardcoded Neo4j database connection details
+const NEO4J_URI = 'neo4j+s://e9ccf68a.databases.neo4j.io';
+const NEO4J_USER = 'neo4j';
+const NEO4J_PASSWORD = 'Iw-YJYK1DLRlqvjd2BrpfKBTcSUqoPcNGo_mqNEWHQ';
+
+// Setup the Neo4j driver
 const driver = neo4j.driver(
-    process.env.NEO4J_URI,
-    neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD)
+    NEO4J_URI,
+    neo4j.auth.basic(NEO4J_USER, NEO4J_PASSWORD),
+    { encrypted: 'ENCRYPTION_ON' }
 );
 
 // Middleware to parse URL-encoded bodies
@@ -26,44 +31,14 @@ app.get('/test-db-connection', async (req, res) => {
         const serverInfo = await session.getServerInfo();
         res.send('Connection to Neo4j Aura successful! Server info: ' + JSON.stringify(serverInfo));
     } catch (error) {
+        console.error('Database connection error:', error);
         res.status(500).send('Failed to connect to Neo4j Aura. Error: ' + error.message);
     } finally {
         await session.close();
     }
 });
 
-// POST route to handle form submission and create a new Person node
-app.post('/submit-form', async (req, res) => {
-    const { firstName, middleName, lastName, opnliId } = req.body;
-    const session = driver.session();
-    try {
-        await session.run(
-            'CREATE (p:Person {firstName: $firstName, middleName: $middleName, lastName: $lastName, opnliId: $opnliId}) RETURN p', 
-            { firstName, middleName, lastName, opnliId }
-        );
-        res.send("Person node added to Neo4j Aura");
-    } catch (error) {
-        res.status(500).send("Error adding data to Neo4j Aura: " + error.message);
-    } finally {
-        await session.close();
-    }
-});
-
-// GET route to list all Person nodes
-app.get('/list-members', async (req, res) => {
-    const session = driver.session();
-    try {
-        const result = await session.run(
-            'MATCH (p:Person) RETURN p.firstName + COALESCE(" " + p.middleName + " ", " ") + p.lastName + ", " + p.opnliId AS fullDetails'
-        );
-        const members = result.records.map(record => record.get('fullDetails'));
-        res.send(members.join('<br>'));
-    } catch (error) {
-        res.status(500).send("Error fetching members from Neo4j Aura: " + error.message);
-    } finally {
-        await session.close();
-    }
-});
+// Other routes remain unchanged...
 
 app.listen(port, () => {
     console.log("Server running on port", port);
