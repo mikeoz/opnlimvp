@@ -29,8 +29,9 @@ app.get('/', (req, res) => {
 app.get('/test-db-connection', async (req, res) => {
     const session = driver.session();
     try {
-        const serverInfo = await session.getServerInfo();
-        res.send('Connection to Neo4j Aura successful! Server info: ' + JSON.stringify(serverInfo));
+        // Perform a basic query to test the connection
+        await session.run('RETURN "Connection successful!" AS message');
+        res.send('Connection to Neo4j Aura successful!');
     } catch (error) {
         console.error('Database connection error:', error);
         res.status(500).send('Failed to connect to Neo4j Aura. Error: ' + error.message);
