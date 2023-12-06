@@ -78,5 +78,28 @@
                 });
         });
     </script>
+
+<script>
+    // ... [previous code]
+
+    function sendDataToServer(data) {
+        fetch('/add-person', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('result').textContent = 'Person added: ' + JSON.stringify(data);
+        })
+        .catch(error => {
+            document.getElementById('result').textContent = 'Error: ' + error;
+        });
+    }
+</script>
+
+
 </body>
 </html>
