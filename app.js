@@ -24,6 +24,28 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// ... [previous code]
+
+// Endpoint to add a new person
+app.post('/add-person', async (req, res) => {
+    const { firstName, middleName, lastName, personId } = req.body;
+    const session = driver.session();
+    try {
+        await session.run('CREATE (p:Person {firstName: $firstName, middleName: $middleName, lastName: $lastName, personId: $personId})', {
+            firstName, middleName, lastName, personId
+        });
+        res.json({ message: 'Person added successfully', data: req.body });
+    } catch (error) {
+        console.error('Error adding person:', error);
+        res.status(500).json({ error: error.message });
+    } finally {
+        await session.close();
+    }
+});
+
+// ... [previous code]
+
+
 // Endpoint to test database connection
 app.get('/test-db-connection', async (req, res) => {
     const session = driver.session();
