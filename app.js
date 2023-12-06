@@ -1,17 +1,12 @@
 const express = require('express');
 const path = require('path');
 const neo4j = require('neo4j-driver');
-require('dotenv').config(); // Add this line if you're using dotenv for environment variables
+require('dotenv').config(); // Use dotenv for environment variables
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Use environment variables for credentials
-const neo4jUri = process.env.NEO4J_URI;
-const neo4jUser = process.env.NEO4J_USER;
-const neo4jPassword = process.env.NEO4J_PASSWORD;
-
-// Setup the Neo4j driver
+// Setup the Neo4j driver using environment variables
 const driver = neo4j.driver(
     process.env.NEO4J_URI,
     neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD)
@@ -24,33 +19,47 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// Endpoint to test database connection
 app.get('/test-db-connection', async (req, res) => {
     const session = driver.session();
     try {
-        await session.run('MATCH (n) RETURN n LIMIT 1');
-        res.send('Connection to Neo4j Aura successful!');
+        const serverInfo = await session.getServerInfo();
+        res.send('Connection to Neo4j Aura successful! Server info: ' + JSON.stringify(serverInfo));
     } catch (error) {
-        res.status(500).send('Failed to connect to Neo4j Aura.');
+        res.status(500).send('Failed to connect to Neo4j Aura. Error: ' + error.message);
     } finally {
         await session.close();
     }
 });
 
-// POST route to handle form submission
+// POST route to handle form submission and create a new Person node
 app.post('/submit-form', async (req, res) => {
     const { firstName, middleName, lastName, opnliId } = req.body;
-
     const session = driver.session();
     try {
-        const result = await session.run(
+        await session.run(
             'CREATE (p:Person {firstName: $firstName, middleName: $middleName, lastName: $lastName, opnliId: $opnliId}) RETURN p', 
             { firstName, middleName, lastName, opnliId }
         );
-
-        res.send("Data added to Neo4j Aura");
+        res.send("Person node added to Neo4j Aura");
     } catch (error) {
-        console.error("Error adding data to Neo4j Aura:", error);
-        res.status(500).send("Error processing request");
+        res.status(500).send("Error adding data to Neo4j Aura: " + error.message);
+    } finally {
+        await session.close();
+    }
+});
+
+// GET route to list all Person nodes
+app.get('/list-members', async (req, res) => {
+    const session = driver.session();
+    try {
+        const result = await session.run(
+            'MATCH (p:Person) RETURN p.firstName + COALESCE(" " + p.middleName + " ", " ") + p.lastName + ", " + p.opnliId AS fullDetails'
+        );
+        const members = result.records.map(record => record.get('fullDetails'));
+        res.send(members.join('<br>'));
+    } catch (error) {
+        res.status(500).send("Error fetching members from Neo4j Aura: " + error.message);
     } finally {
         await session.close();
     }
