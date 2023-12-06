@@ -43,15 +43,24 @@
                 lastName: document.getElementById('lastName').value,
                 personId: document.getElementById('opnliId').value
             };
-
-            // Call the function to send data to the server
             sendDataToServer(data);
         });
 
         function sendDataToServer(data) {
-            // Implement AJAX request to send data to your backend
-            console.log('Sending data to server:', data);
-            // Use fetch or XMLHttpRequest here to send 'data' to your backend
+            fetch('/add-person', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').textContent = 'Person added: ' + JSON.stringify(data);
+            })
+            .catch(error => {
+                document.getElementById('result').textContent = 'Error: ' + error;
+            });
         }
 
         document.getElementById('testConnection').addEventListener('click', function() {
@@ -69,8 +78,6 @@
             fetch('/list-members')
                 .then(response => response.json())
                 .then(data => {
-                    // Handle the list of members here
-                    console.log('Members:', data);
                     document.getElementById('result').textContent = 'Members: ' + JSON.stringify(data);
                 })
                 .catch(error => {
@@ -78,28 +85,5 @@
                 });
         });
     </script>
-
-<script>
-    // ... [previous code]
-
-    function sendDataToServer(data) {
-        fetch('/add-person', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('result').textContent = 'Person added: ' + JSON.stringify(data);
-        })
-        .catch(error => {
-            document.getElementById('result').textContent = 'Error: ' + error;
-        });
-    }
-</script>
-
-
 </body>
 </html>
