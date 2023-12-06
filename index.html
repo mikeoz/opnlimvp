@@ -1,73 +1,82 @@
 <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Person Data Entry</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100vh;
-                    margin: 0;
-                }
-                form {
-                    display: flex;
-                    flex-direction: column;
-                    width: 300px; /* Approximate width of an iPhone screen */
-                }
-                input, button {
-                    margin: 5px 0;
-                }
-            </style>
-        </head>
-        <body>
-            <form id="personForm">
-                <input type="text" id="firstName" placeholder="First Name">
-                <input type="text" id="middleName" placeholder="Middle Name">
-                <input type="text" id="lastName" placeholder="Last Name">
-                <input type="text" id="opnliId" placeholder="Opnli ID">
-                <button type="submit">Submit</button>
-            </form>
+<html>
+<head>
+    <title>Person Data Entry</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 300px; /* Approximate width of an iPhone screen */
+        }
+        input, button {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <form id="personForm">
+        <input type="text" id="firstName" placeholder="First Name">
+        <input type="text" id="middleName" placeholder="Middle Name">
+        <input type="text" id="lastName" placeholder="Last Name">
+        <input type="text" id="opnliId" placeholder="Opnli ID">
+        <button type="button" id="submitPerson">Submit</button>
+    </form>
 
-            <script>
-                document.getElementById('personForm').addEventListener('submit', function(e) {
-                    e.preventDefault();
+    <button id="testConnection">Test Connection</button>
+    <button id="listMembers">List Members</button>
+    <p id="result"></p>
 
-                    var data = {
-                        firstName: document.getElementById('firstName').value,
-                        middleName: document.getElementById('middleName').value,
-                        lastName: document.getElementById('lastName').value,
-                        personId: document.getElementById('opnliId').value
-                    };
+    <script>
+        document.getElementById('submitPerson').addEventListener('click', function() {
+            var data = {
+                firstName: document.getElementById('firstName').value,
+                middleName: document.getElementById('middleName').value,
+                lastName: document.getElementById('lastName').value,
+                personId: document.getElementById('opnliId').value
+            };
 
-                    // Call the function to send data to the server
-                    sendDataToServer(data);
+            // Call the function to send data to the server
+            sendDataToServer(data);
+        });
+
+        function sendDataToServer(data) {
+            // Implement AJAX request to send data to your backend
+            console.log('Sending data to server:', data);
+            // Use fetch or XMLHttpRequest here to send 'data' to your backend
+        }
+
+        document.getElementById('testConnection').addEventListener('click', function() {
+            fetch('/test-db-connection')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('result').textContent = 'Connection Test Result: ' + data;
+                })
+                .catch(error => {
+                    document.getElementById('result').textContent = 'Error: ' + error;
                 });
+        });
 
-                function sendDataToServer(data) {
-                    // Implement AJAX request to send data to your backend
-                    console.log('Sending data to server:', data);
-                    // Use fetch or XMLHttpRequest here to send 'data' to your backend
-                }
-            </script>
-
-            <button id="testConnection">Test Neo4j Connection</button>
-                <p id="result"></p>
-
-                <script>
-                    document.getElementById('testConnection').addEventListener('click', function() {
-                        fetch('/test-db-connection')
-                            .then(response => response.text())
-                            .then(data => {
-                                document.getElementById('result').textContent = data;
-                            })
-                            .catch(error => {
-                                document.getElementById('result').textContent = 'Error: ' + error;
-                            });
-                    });
-                </script>
-
-        </body>
-        </html>
+        document.getElementById('listMembers').addEventListener('click', function() {
+            fetch('/list-members')
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the list of members here
+                    console.log('Members:', data);
+                    document.getElementById('result').textContent = 'Members: ' + JSON.stringify(data);
+                })
+                .catch(error => {
+                    document.getElementById('result').textContent = 'Error: ' + error;
+                });
+        });
+    </script>
+</body>
+</html>
