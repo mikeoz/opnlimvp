@@ -22,6 +22,18 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.get('/directory', (req, res) => {
+    res.sendFile(path.join(__dirname, 'directory.html'));
+});
+
+app.get('/directory', (req, res) => {
+    res.sendFile(path.join(__dirname, 'news.html'));
+});
+
+app.get('/directory', (req, res) => {
+    res.sendFile(path.join(__dirname, 'home.html'));
+});
+
 app.post('/add-person', async (req, res) => {
     const { firstName, middleName, lastName, personId } = req.body;
     const session = driver.session();
