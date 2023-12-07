@@ -1,3 +1,4 @@
+// Assuming you're using Node.js with Express
 const express = require('express');
 const path = require('path');
 const neo4j = require('neo4j-driver');
@@ -17,66 +18,20 @@ const driver = neo4j.driver(
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static(path.join(__dirname))); // Serve static files like CSS
 
+// Endpoint for the main page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// Add additional endpoints for other HTML pages if needed
+// Example:
 app.get('/directory', (req, res) => {
     res.sendFile(path.join(__dirname, 'directory.html'));
 });
 
-app.get('/directory', (req, res) => {
-    res.sendFile(path.join(__dirname, 'news.html'));
-});
-
-app.get('/directory', (req, res) => {
-    res.sendFile(path.join(__dirname, 'home.html'));
-});
-
-app.post('/add-person', async (req, res) => {
-    const { firstName, middleName, lastName, personId } = req.body;
-    const session = driver.session();
-    try {
-        await session.run(
-            'CREATE (p:Person {firstName: $firstName, middleName: $middleName, lastName: $lastName, personId: $personId})',
-            { firstName, middleName, lastName, personId }
-        );
-        res.json({ message: 'Person added successfully', data: req.body });
-    } catch (error) {
-        console.error('Error adding person:', error);
-        res.status(500).json({ error: error.message });
-    } finally {
-        await session.close();
-    }
-});
-
-app.get('/test-db-connection', async (req, res) => {
-    const session = driver.session();
-    try {
-        await session.run('RETURN "Connection successful!" AS message');
-        res.send('Connection complete at ' + new Date().toLocaleString());
-    } catch (error) {
-        console.error('Database connection error:', error);
-        res.status(500).send('Failed to connect to Neo4j Aura. Error: ' + error.message);
-    } finally {
-        await session.close();
-    }
-});
-
-app.get('/list-members', async (req, res) => {
-    const session = driver.session();
-    try {
-        const result = await session.run('MATCH (p:Person) RETURN p');
-        const members = result.records.map(record => record.get('p').properties);
-        res.json(members);
-    } catch (error) {
-        console.error('Error fetching members:', error);
-        res.status(500).json({ error: error.message });
-    } finally {
-        await session.close();
-    }
-});
+// Other routes as defined previously...
 
 app.listen(port, () => {
     console.log("Server running on port", port);
