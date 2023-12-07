@@ -19,11 +19,28 @@ const driver = neo4j.driver(
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname))); // Serve static files like CSS
+app.use(express.static(path.join(__dirname)));
 
 // Endpoint for the main page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Endpoint to add a new person
+app.post('/add-person', async (req, res) => {
+    const { firstName, middleName, lastName, personId } = req.body;
+    const session = driver.session();
+    try {
+        await session.run('CREATE (p:Person {firstName: $firstName, middleName: $middleName, lastName: $lastName, personId: $personId})', {
+            firstName, middleName, lastName, personId
+        });
+        res.json({ message: 'Person added successfully', data: req.body });
+    } catch (error) {
+        console.error('Error adding person:', error);
+        res.status(500).json({ error: error.message });
+    } finally {
+        await session.close();
+    }
 });
 
 // Add endpoints for other actions like testing connection, listing members, etc.
