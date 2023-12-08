@@ -7,7 +7,7 @@
 </head>
 <body>
     <header>Opnli</header>
-    
+
     <form id="personForm">
         <input type="text" id="firstName" placeholder="First Name">
         <input type="text" id="middleName" placeholder="Middle Name">
@@ -16,7 +16,7 @@
         <button type="button" id="submitPerson">Submit</button>
     </form>
 
-    <div class="footer-buttons">
+    <div class="button-section">
         <button id="testConnection">Test Connection</button>
         <button id="listMembers">List Members</button>
     </div>
@@ -30,55 +30,6 @@
 
     <p id="result"></p>
 
-    <script>
-        document.getElementById('submitPerson').addEventListener('click', function() {
-            var data = {
-                firstName: document.getElementById('firstName').value,
-                middleName: document.getElementById('middleName').value,
-                lastName: document.getElementById('lastName').value,
-                personId: document.getElementById('opnliId').value
-            };
-            sendDataToServer(data);
-        });
-
-        function sendDataToServer(data) {
-            fetch('/add-person', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('result').textContent = 'Person added: ' + JSON.stringify(data);
-            })
-            .catch(error => {
-                document.getElementById('result').textContent = 'Error: ' + error;
-            });
-        }
-
-        document.getElementById('testConnection').addEventListener('click', function() {
-            fetch('/test-db-connection')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('result').textContent = 'Connection Test Result: ' + data;
-                })
-                .catch(error => {
-                    document.getElementById('result').textContent = 'Error: ' + error;
-                });
-        });
-
-        document.getElementById('listMembers').addEventListener('click', function() {
-            fetch('/list-members')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('result').textContent = 'Members: ' + JSON.stringify(data);
-                })
-                .catch(error => {
-                    document.getElementById('result').textContent = 'Error: ' + error;
-                });
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
