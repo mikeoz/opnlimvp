@@ -50,10 +50,14 @@ button:hover {
     background-color: #005ecb;
 }
 
-.button-section {
+#controlButtons {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+#versionInfo {
+    margin-top: 20px;
 }
 
 footer {
@@ -72,8 +76,6 @@ footer a {
     color: #007aff;
     font-weight: bold;
 }
-
-
 
 @media screen and (max-width: 768px) {
     form {
