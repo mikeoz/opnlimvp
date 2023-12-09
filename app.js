@@ -34,6 +34,11 @@ app.get('/home.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'home.html'));
 });
 
+// Adding route for 'index.html' to address the "Test Add Card Button" issue
+app.get('/index.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 // Endpoint to test database connection
 app.get('/test-db-connection', async (req, res) => {
     const session = driver.session();
@@ -68,14 +73,13 @@ app.get('/list-members', async (req, res) => {
 app.post('/add-person', async (req, res) => {
     const session = driver.session();
     try {
-        // Extract data from request body
-        const { firstName, middleName, lastName, opnliId } = req.body;
-        // Create a new person in the database
+        const { person_id, first_name, middle_name, last_name } = req.body; // Use the field names as per Neo4j Aura expectations
         const result = await session.run(
-            'CREATE (p:Person {firstName: $firstName, middleName: $middleName, lastName: $lastName, opnliId: $opnliId}) RETURN p',
-            { firstName, middleName, lastName, opnliId }
+            'CREATE (p:Person {personId: $person_id, firstName: $first_name, middleName: $middle_name, lastName: $last_name}) RETURN p',
+            { person_id, first_name, middle_name, last_name }
         );
-        res.status(201).json(result.records[0].get('p').properties);
+        const person = result.records[0].get('p').properties;
+        res.json({ message: 'Person added', person });
     } catch (error) {
         console.error('Error adding person:', error);
         res.status(500).json({ error: error.message });
