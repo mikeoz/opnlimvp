@@ -52,7 +52,6 @@ app.get('/list-members', async (req, res) => {
     }
 });
 
-
 // Endpoint to add a person
 app.post('/add-person', async (req, res) => {
     const session = driver.session();
