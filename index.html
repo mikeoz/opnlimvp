@@ -31,15 +31,15 @@
     <p id="result"></p>
 
     <script>
-        document.getElementById('submitPerson').addEventListener('click', function() {
-            var data = {
-                firstName: document.getElementById('firstName').value,
-                middleName: document.getElementById('middleName').value,
-                lastName: document.getElementById('lastName').value,
-                personId: document.getElementById('opnliId').value
-            };
-            sendDataToServer(data);
-        });
+document.getElementById('submitPerson').addEventListener('click', function() {
+    var data = {
+        person_id: document.getElementById('opnliId').value, // changed to person_id
+        first_name: document.getElementById('firstName').value, // changed to first_name
+        middle_name: document.getElementById('middleName').value, // changed to middle_name
+        last_name: document.getElementById('lastName').value // changed to last_name
+    };
+    sendDataToServer(data);
+});
 
         function sendDataToServer(data) {
             fetch('/add-person', {
