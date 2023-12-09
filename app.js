@@ -73,9 +73,9 @@ app.get('/list-members', async (req, res) => {
 app.post('/add-person', async (req, res) => {
     const session = driver.session();
     try {
-        const { person_id, first_name, middle_name, last_name } = req.body; // Use the field names as per Neo4j Aura expectations
+        const { person_id, first_name, middle_name, last_name } = req.body;
         const result = await session.run(
-            'CREATE (p:Person {personId: $person_id, firstName: $first_name, middleName: $middle_name, lastName: $last_name}) RETURN p',
+            'CREATE (p:Person {person_id: $person_id, first_name: $first_name, middle_name: $middle_name, last_name: $last_name}) RETURN p',
             { person_id, first_name, middle_name, last_name }
         );
         const person = result.records[0].get('p').properties;
