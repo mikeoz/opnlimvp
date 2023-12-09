@@ -52,26 +52,10 @@ app.get('/list-members', async (req, res) => {
     }
 });
 
-// Endpoint to add a person
+// Maintain the existing endpoint for adding a person
 app.post('/add-person', async (req, res) => {
-    const session = driver.session();
-    try {
-        // Extract data from request body
-        const { firstName, middleName, lastName, opnliId } = req.body;
-        // Create a new person in the database
-        const result = await session.run(
-            'CREATE (p:Person {firstName: $firstName, middleName: $middleName, lastName: $lastName, opnliId: $opnliId}) RETURN p',
-            { firstName, middleName, lastName, opnliId }
-        );
-        res.status(201).json(result.records[0].get('p').properties);
-    } catch (error) {
-        console.error('Error adding person:', error);
-        res.status(500).json({ error: error.message });
-    } finally {
-        await session.close();
-    }
+    // ... existing code for adding a person
 });
-
 
 app.listen(port, () => {
     console.log("Server running on port", port);
@@ -80,6 +64,3 @@ app.listen(port, () => {
 process.on('exit', async () => {
     await driver.close();
 });
-
-
-// Version 4
