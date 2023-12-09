@@ -22,6 +22,18 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.get('/news.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'news.html'));
+});
+
+app.get('/directory.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'directory.html'));
+});
+
+app.get('/home.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'home.html'));
+});
+
 // Endpoint to test database connection
 app.get('/test-db-connection', async (req, res) => {
     const session = driver.session();
@@ -54,7 +66,22 @@ app.get('/list-members', async (req, res) => {
 
 // Maintain the existing endpoint for adding a person
 app.post('/add-person', async (req, res) => {
-    // ... existing code for adding a person
+    const session = driver.session();
+    try {
+        // Extract data from request body
+        const { firstName, middleName, lastName, opnliId } = req.body;
+        // Create a new person in the database
+        const result = await session.run(
+            'CREATE (p:Person {firstName: $firstName, middleName: $middleName, lastName: $lastName, opnliId: $opnliId}) RETURN p',
+            { firstName, middleName, lastName, opnliId }
+        );
+        res.status(201).json(result.records[0].get('p').properties);
+    } catch (error) {
+        console.error('Error adding person:', error);
+        res.status(500).json({ error: error.message });
+    } finally {
+        await session.close();
+    }
 });
 
 app.listen(port, () => {
