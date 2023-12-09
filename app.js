@@ -52,7 +52,7 @@ app.get('/list-members', async (req, res) => {
     }
 });
 
-// Maintain the existing endpoint for adding a person
+// Maintain the existing endpoint for adding a person (v11)
 app.post('/add-person', async (req, res) => {
     // ... existing code for adding a person
 });
