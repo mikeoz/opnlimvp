@@ -33,11 +33,11 @@
     <script>
 document.getElementById('submitPerson').addEventListener('click', function() {
     var data = {
-        person_id: document.getElementById('opnliId').value, // changed to person_id
-        first_name: document.getElementById('firstName').value, // changed to first_name
-        middle_name: document.getElementById('middleName').value, // changed to middle_name
-        last_name: document.getElementById('lastName').value // changed to last_name
-    };
+    person_id: document.getElementById('opnliId').value, // snake_case
+    first_name: document.getElementById('firstName').value, // snake_case
+    middle_name: document.getElementById('middleName').value, // snake_case
+    last_name: document.getElementById('lastName').value // snake_case
+};
     sendDataToServer(data);
 });
 
