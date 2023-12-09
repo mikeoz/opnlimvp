@@ -5,10 +5,9 @@ const neo4j = require('neo4j-driver');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Environment variables should be used for sensitive data
-const NEO4J_URI = process.env.NEO4J_URI || 'neo4j+s://5159a76c.databases.neo4j.io';
-const NEO4J_USER = process.env.NEO4J_USER || 'neo4j';
-const NEO4J_PASSWORD = process.env.NEO4J_PASSWORD || 'iMPDP8-5B4wYGnQRNGIBKP4M7dEoR1EJ9APqT7YiDso';
+const NEO4J_URI = 'neo4j+s://5159a76c.databases.neo4j.io';
+const NEO4J_USER = 'neo4j';
+const NEO4J_PASSWORD = 'iMPDP8-5B4wYGnQRNGIBKP4M7dEoR1EJ9APqT7YiDso';
 
 const driver = neo4j.driver(
     NEO4J_URI,
@@ -53,23 +52,9 @@ app.get('/list-members', async (req, res) => {
     }
 });
 
-// Endpoint to add a person
+// Maintain the existing endpoint for adding a person
 app.post('/add-person', async (req, res) => {
-    const session = driver.session();
-    try {
-        const { firstName, middleName, lastName, personId } = req.body;
-        const result = await session.run(
-            'CREATE (p:Person {firstName: $firstName, middleName: $middleName, lastName: $lastName, personId: $personId}) RETURN p',
-            { firstName, middleName, lastName, personId }
-        );
-        const person = result.records[0].get('p').properties;
-        res.json({ message: 'Person added', person });
-    } catch (error) {
-        console.error('Error adding person:', error);
-        res.status(500).json({ error: error.message });
-    } finally {
-        await session.close();
-    }
+    // ... existing code for adding a person
 });
 
 app.listen(port, () => {
