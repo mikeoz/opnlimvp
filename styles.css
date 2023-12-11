@@ -2,17 +2,12 @@
     font-family: Arial, sans-serif;
 }
 
-.person {
+.individual {
     margin-bottom: 20px;
 }
 
-.person-id {
-    font-weight: bold;
-    color: #333;
-}
-
 .name {
-    color: black;
+    color: darkorange;
     font-weight: bold;
 }
 
@@ -23,6 +18,8 @@
 .family {
     margin-left: 20px;
     margin-top: 10px;
+    color: brightblue;
+    font-weight: bold;
 }
 
 .family-name {
@@ -30,9 +27,11 @@
 }
 
 .family-member .name {
-    color: #555;
+    color: black;
 }
 
 .title {
     font-style: italic;
 }
+
+/* Additional styling as needed */
