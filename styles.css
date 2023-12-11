@@ -6,19 +6,20 @@
     margin-bottom: 20px;
 }
 
-.name {
+.name, .name-indented {
     color: darkorange;
     font-weight: bold;
 }
 
-.contact-info {
+.contact-info, .email-indented, .phone-indented {
     margin-left: 20px;
+    display: block; /* Ensures the element is on a new line */
 }
 
 .family {
     margin-left: 20px;
     margin-top: 10px;
-    color: blue; /* Changed from brightblue to blue */
+    color: blue; /* Assuming you have replaced 'brightblue' with 'blue' */
     font-weight: bold;
 }
 
@@ -30,6 +31,6 @@
     color: black;
 }
 
-.title {
+.title, .title-indented {
     font-style: italic;
 }
