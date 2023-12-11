@@ -1,0 +1,38 @@
+.directory {
+    font-family: Arial, sans-serif;
+}
+
+.person {
+    margin-bottom: 20px;
+}
+
+.person-id {
+    font-weight: bold;
+    color: #333;
+}
+
+.name {
+    color: black;
+    font-weight: bold;
+}
+
+.contact-info {
+    margin-left: 20px;
+}
+
+.family {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.family-name {
+    font-weight: bold;
+}
+
+.family-member .name {
+    color: #555;
+}
+
+.title {
+    font-style: italic;
+}
