@@ -39,6 +39,11 @@ app.get('/index.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// Adding route for 'memberlist.html' to return all Person node data
+app.get('/memberlist.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'memberlist.html'));
+});
+
 // Endpoint to test database connection
 app.get('/test-db-connection', async (req, res) => {
     const session = driver.session();
