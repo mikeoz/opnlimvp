@@ -2,7 +2,7 @@
     font-family: Arial, sans-serif;
 }
 
-.individual {
+.person {
     margin-bottom: 20px;
 }
 
@@ -18,7 +18,7 @@
 .family {
     margin-left: 20px;
     margin-top: 10px;
-    color: brightblue;
+    color: blue; /* Changed from brightblue to blue */
     font-weight: bold;
 }
 
@@ -33,5 +33,3 @@
 .title {
     font-style: italic;
 }
-
-/* Additional styling as needed */
