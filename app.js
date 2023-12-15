@@ -59,11 +59,11 @@ app.get('/test-db-connection', async (req, res) => {
     }
 });
 
-// Endpoint to list members
+// Endpoint to list members sorted by last name and then first name
 app.get('/list-members', async (req, res) => {
     const session = driver.session();
     try {
-        const result = await session.run('MATCH (p:Person) RETURN p');
+        const result = await session.run('MATCH (p:Person) RETURN p ORDER BY p.last_name, p.first_name');
         const members = result.records.map(record => record.get('p').properties);
         res.json(members);
     } catch (error) {
