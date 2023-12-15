@@ -75,23 +75,37 @@ document.getElementById('submitPerson').addEventListener('click', function() {
         resultDiv.innerHTML += `<div class="member-info">${name}${opnliId}</div>`;
     });
 
-        document.getElementById('listMembers').addEventListener('click', function() {
-        fetch('/list-members')
-            .then(response => response.json())
-            .then(data => {
-                const resultDiv = document.getElementById('result');
-                resultDiv.innerHTML = ''; 
-            // Clear previous results
-                data.forEach(person => {
-                    const name = `<strong>${person.last_name}, ${person.first_name}</strong>` + (person.middle_name ? ` ${person.middle_name}` : '');
-                    const opnliId = `<span style="color: red; font-weight: bold;">${person.opnli_id}</span>`;
-                    resultDiv.innerHTML += `<div>${name}<br>${opnliId}</div><br>`;
-                });
-            })
-            .catch(error => {
-                document.getElementById('result').textContent = 'Error: ' + error;
-            });
-    });
+    document.getElementById('listMembers').addEventListener('click', function() {
+    fetch('/list-members')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = ''; // Clear previous results
+
+            // Check if data is an array and has elements
+            if (Array.isArray(data) && data.length) {
+                const formattedHtml = data.map(person => {
+                    const name = `<strong>${person.last_name || ''}, ${person.first_name || ''}</strong>` + 
+                                 (person.middle_name ? ` ${person.middle_name}` : '');
+                    const opnliId = `<span style="color: red; font-weight: bold;">${person.opnli_id || ''}</span>`;
+                    return `<div>${name}<br>${opnliId}</div>`;
+                }).join('<br>'); // Join all elements with a line break
+
+                resultDiv.innerHTML = formattedHtml;
+            } else {
+                resultDiv.textContent = 'No members found';
+            }
+        })
+        .catch(error => {
+            document.getElementById('result').textContent = 'Error: ' + error;
+        });
+});
+
     </script>
 </body>
 </html>
