@@ -73,6 +73,7 @@ footer a {
 }
 
 .name {
+    color: red; 
     font-weight: bold;
 }
 
