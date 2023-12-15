@@ -69,6 +69,12 @@ document.getElementById('submitPerson').addEventListener('click', function() {
                 });
         });
 
+        data.forEach(person => {
+        const name = `<div class="name">${person.last_name}, ${person.first_name}` + (person.middle_name ? ` ${person.middle_name}` : '') + '</div>';
+        const opnliId = `<div class="opnli-id">${person.opnli_id}</div>`;
+        resultDiv.innerHTML += `<div class="member-info">${name}${opnliId}</div>`;
+    });
+
         document.getElementById('listMembers').addEventListener('click', function() {
         fetch('/list-members')
             .then(response => response.json())
