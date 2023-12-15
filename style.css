@@ -72,6 +72,20 @@ footer a {
     font-weight: bold;
 }
 
+.name {
+    font-weight: bold;
+}
+
+.opnli-id {
+    color: red;
+    font-weight: bold;
+}
+
+.member-info {
+    margin-bottom: 10px;
+}
+
+
 @media screen and (max-width: 768px) {
     form {
         width: 100%;
