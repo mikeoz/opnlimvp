@@ -70,15 +70,21 @@ document.getElementById('submitPerson').addEventListener('click', function() {
         });
 
         document.getElementById('listMembers').addEventListener('click', function() {
-            fetch('/list-members')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('result').textContent = 'Members: ' + JSON.stringify(data);
-                })
-                .catch(error => {
-                    document.getElementById('result').textContent = 'Error: ' + error;
+        fetch('/list-members')
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = ''; // Clear previous results
+                data.forEach(person => {
+                    const name = `<strong>${person.last_name}, ${person.first_name}</strong>` + (person.middle_name ? ` ${person.middle_name}` : '');
+                    const opnliId = `<span style="color: red; font-weight: bold;">${person.opnli_id}</span>`;
+                    resultDiv.innerHTML += `<div>${name}<br>${opnliId}</div><br>`;
                 });
-        });
+            })
+            .catch(error => {
+                document.getElementById('result').textContent = 'Error: ' + error;
+            });
+    });
     </script>
 </body>
 </html>
