@@ -80,7 +80,8 @@ document.getElementById('submitPerson').addEventListener('click', function() {
             .then(response => response.json())
             .then(data => {
                 const resultDiv = document.getElementById('result');
-                resultDiv.innerHTML = ''; // Clear previous results
+                resultDiv.innerHTML = ''; 
+            // Clear previous results
                 data.forEach(person => {
                     const name = `<strong>${person.last_name}, ${person.first_name}</strong>` + (person.middle_name ? ` ${person.middle_name}` : '');
                     const opnliId = `<span style="color: red; font-weight: bold;">${person.opnli_id}</span>`;
