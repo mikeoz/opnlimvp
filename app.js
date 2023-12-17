@@ -15,7 +15,7 @@ const driver = neo4j.driver(
     { maxTransactionRetryTime: 30000 }
 );
 
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, 'opnlimvp-client/build')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
