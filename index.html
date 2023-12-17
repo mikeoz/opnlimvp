@@ -19,6 +19,7 @@
     <div class="footer-buttons">
         <button id="testConnection">Test Connection</button>
         <button id="listMembers">List Members</button>
+        <button id="reactFormButton">React Form</button> <!-- New React Form Button -->
     </div>
 
     <footer>
@@ -31,7 +32,6 @@
     <p id="result"></p>
 
     <script>
-        // Send Data to Server Function
         function sendDataToServer(data) {
             fetch('/add-person', {
                 method: 'POST',
@@ -49,7 +49,6 @@
             });
         }
 
-        // Event listener for Submit Person button
         document.getElementById('submitPerson').addEventListener('click', function() {
             var data = {
                 person_id: document.getElementById('opnliId').value,
@@ -60,7 +59,6 @@
             sendDataToServer(data);
         });
 
-        // Event listener for Test Connection button
         document.getElementById('testConnection').addEventListener('click', function() {
             fetch('/test-db-connection')
                 .then(response => response.text())
@@ -72,7 +70,6 @@
                 });
         });
 
-        // Event listener for List Members button
         document.getElementById('listMembers').addEventListener('click', function() {
             fetch('/list-members')
                 .then(response => {
@@ -83,7 +80,7 @@
                 })
                 .then(data => {
                     const resultDiv = document.getElementById('result');
-                    resultDiv.innerHTML = ''; // Clear previous results
+                    resultDiv.innerHTML = '';
 
                     if (Array.isArray(data) && data.length) {
                         data.forEach(person => {
@@ -99,6 +96,11 @@
                 .catch(error => {
                     document.getElementById('result').textContent = 'Error: ' + error;
                 });
+        });
+
+        // Event listener for React Form button
+        document.getElementById('reactFormButton').addEventListener('click', function() {
+            window.location.href = '/react-form';
         });
     </script>
 </body>
