@@ -18,10 +18,15 @@ const PersonForm = () => {
             const response = await fetch('/add-person', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(person)
+                body: JSON.stringify({
+                    first_name: person.firstName,
+                    middle_name: person.middleName,
+                    last_name: person.lastName,
+                    person_id: person.opnliId
+                })
             });
             const data = await response.json();
-            console.log(data);
+            console.log('Person added:', data);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -33,7 +38,7 @@ const PersonForm = () => {
             <input type="text" name="middleName" placeholder="Middle Name" onChange={handleChange} />
             <input type="text" name="lastName" placeholder="Last Name" onChange={handleChange} />
             <input type="text" name="opnliId" placeholder="Opnli ID" onChange={handleChange} />
-            <button type="submit">Submit</button>
+            <button type="submit">Submit React Form</button>
         </form>
     );
 };
